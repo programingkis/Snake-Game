@@ -6,10 +6,14 @@ import tkinter as tk
 from tkinter import messagebox
 
 width = 500
-height = 500
+height = 600
 
 cols = 25
 rows = 20
+
+pygame.font.init()
+font = pygame.font.SysFont(None,30)
+
 
 
 class cube():
@@ -128,6 +132,10 @@ def redrawWindow():
     win.fill((0,0,0))
     drawGrid(width, rows, win)
     s.draw(win)
+    score = len(s.body)
+    score = font.render("score : {}".format(str(score - 1)), True, (255, 255, 255))
+
+    win.blit(score,(10,520))
     snack.draw(win)
     pygame.display.update()
     pass
@@ -166,7 +174,6 @@ def main():
     global s, snack, win
     win = pygame.display.set_mode((width,height))
     s = snake((255,0,0), (10,10))
-    s.addCube()
     snack = cube(randomSnack(rows,s), color=(0,255,0))
     flag = True
     clock = pygame.time.Clock()
@@ -177,7 +184,6 @@ def main():
         s.move()
         headPos = s.head.pos
         if headPos[0] >= 20 or headPos[0] < 0 or headPos[1] >= 20 or headPos[1] < 0:
-            print("Score:", len(s.body))
             s.reset((10, 10))
 
         if s.body[0].pos == snack.pos:
@@ -186,7 +192,6 @@ def main():
             
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z:z.pos,s.body[x+1:])):
-                print("Score:", len(s.body))
                 s.reset((10,10))
                 break
                     
