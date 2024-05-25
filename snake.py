@@ -11,6 +11,7 @@ height = 600
 cols = 25
 rows = 20
 
+best =0
 pygame.font.init()
 font = pygame.font.SysFont(None,30)
 
@@ -126,13 +127,17 @@ class snake():
 
 
 def redrawWindow():
-    global win
+    global win,best
     win.fill((0,0,0))
     drawGrid(width, rows, win)
     s.draw(win)
     score = len(s.body)
+    if score >= best:
+        best = score
     score = font.render("score : {}".format(str(score - 1)), True, (255, 255, 255))
+    best_s = font.render("best : {}".format(str(best - 1)), True, (255, 255, 255))
     win.blit(score,(10,520))
+    win.blit(best_s,(10,550))
     snack.draw(win)
     pygame.display.update()
     pass
