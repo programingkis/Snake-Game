@@ -125,6 +125,27 @@ class snake():
                 c.draw(surface)
 
 
+def button(txt, x, y, w, h, ic, ac, action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+
+    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+        pygame.draw.rect(win, ac, (x, y, w, h))
+        if click[0] == 1 and action is not None:
+            action()
+    else:
+        pygame.draw.rect(win, ic, (x, y, w, h))
+
+    small_text = pygame.font.SysFont(None, 20)
+    text_surface = small_text.render(txt, True, (255,255,255))
+    text_rect = text_surface.get_rect()
+    text_rect.center = ((x + (w / 2)), (y + (h / 2)))
+    win.blit(text_surface, text_rect)
+
+def quit_game():
+    pygame.quit()
+    quit()
+
 
 def redrawWindow():
     global win,best
@@ -136,6 +157,7 @@ def redrawWindow():
         best = score
     score = font.render("score : {}".format(str(score - 1)), True, (255, 255, 255))
     best_s = font.render("best : {}".format(str(best - 1)), True, (255, 255, 255))
+    button("QUIT", 400, 550, 80, 40, (255, 0, 0), (200, 0, 0), quit_game)
     win.blit(score,(10,520))
     win.blit(best_s,(10,550))
     snack.draw(win)
