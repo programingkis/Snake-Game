@@ -1,5 +1,4 @@
 import math
-import random
 import pygame
 import random
 import tkinter as tk
@@ -14,6 +13,7 @@ rows = 20
 best =0
 pygame.font.init()
 font = pygame.font.SysFont(None,30)
+py = pygame.font.SysFont(None,60)
 
 class cube():
     rows = 20
@@ -125,6 +125,7 @@ class snake():
                 c.draw(surface)
 
 
+
 def button(txt, x, y, w, h, ic, ac, action=None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
@@ -157,13 +158,12 @@ def redrawWindow():
         best = score
     score = font.render("score : {}".format(str(score - 1)), True, (255, 255, 255))
     best_s = font.render("best : {}".format(str(best - 1)), True, (255, 255, 255))
-    button("QUIT", 400, 550, 80, 40, (255, 0, 0), (200, 0, 0), quit_game)
+    button("QUIT", 400, 550, 80, 40, (255,0,0), (200,0,0), quit_game)
     win.blit(score,(10,520))
     win.blit(best_s,(10,550))
     snack.draw(win)
     pygame.display.update()
     pass
-
 
 
 def drawGrid(w, rows, surface):
@@ -201,9 +201,11 @@ def main():
     snack = cube(randomSnack(rows,s), color=(0,255,0))
     flag = True
     clock = pygame.time.Clock()
-    
+
     while flag:
-        pygame.time.delay(50)
+
+
+        pygame.time.delay(40)
         clock.tick(10)
         s.move()
         headPos = s.head.pos
@@ -213,15 +215,34 @@ def main():
         if s.body[0].pos == snack.pos:
             s.addCube()
             snack = cube(randomSnack(rows,s), color=(0,255,0))
-            
         for x in range(len(s.body)):
             if s.body[x].pos in list(map(lambda z:z.pos,s.body[x+1:])):
                 s.reset((10,10))
                 break
-                    
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                flag = False
+
         redrawWindow()
 
-main()
-    
+pygame.init()
+win = pygame.display.set_mode((width, height))
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+    py_snake = py.render("pygame_Snake", True, (255, 255, 255))
+    button('quit', 210, 350, 80, 40, (255, 0, 0), (200, 0, 0), quit_game)
+    button('start', 210, 300, 80, 40, (0, 255, 255), (0, 200, 200), main)
+    win.blit(py_snake, (100, 200))
+    pygame.display.update()
+
+
+
+
+
+
 
     
